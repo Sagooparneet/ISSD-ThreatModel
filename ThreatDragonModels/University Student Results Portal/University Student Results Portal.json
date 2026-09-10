@@ -36,6 +36,74 @@
         "version": "2.6.2",
         "cells": [
           {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": -1,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "Trust Boundary",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "crossingFlows": [],
+              "containedElements": []
+            },
+            "labels": [
+              "Trust Boundary"
+            ],
+            "id": "aa15d476-4e49-43b6-9625-5fd02ee475c4",
+            "source": {
+              "x": 448,
+              "y": 55
+            },
+            "target": {
+              "x": 450,
+              "y": 680
+            },
+            "vertices": [
+              {
+                "x": 448,
+                "y": 370
+              }
+            ]
+          },
+          {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "Trust Boundary",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "crossingFlows": [],
+              "containedElements": []
+            },
+            "labels": [
+              "Trust Boundary"
+            ],
+            "id": "6363417c-1ade-43e2-bc04-8ba0f9573fb8",
+            "source": {
+              "x": 260,
+              "y": 67
+            },
+            "target": {
+              "x": 262,
+              "y": 692
+            },
+            "zIndex": -1,
+            "vertices": [
+              {
+                "x": 260,
+                "y": 340
+              }
+            ]
+          },
+          {
             "position": {
               "x": 40,
               "y": 90
@@ -501,12 +569,12 @@
           },
           {
             "position": {
-              "x": 530,
+              "x": 520,
               "y": 290.5
             },
             "size": {
-              "width": 120,
-              "height": 100
+              "width": 130,
+              "height": 110
             },
             "attrs": {
               "text": {
@@ -617,12 +685,12 @@
           },
           {
             "position": {
-              "x": 745,
+              "x": 715,
               "y": 283
             },
             "size": {
-              "width": 120,
-              "height": 100
+              "width": 150,
+              "height": 140
             },
             "attrs": {
               "text": {
