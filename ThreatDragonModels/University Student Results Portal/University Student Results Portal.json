@@ -1,279 +1,1547 @@
-import json, uuid, os, textwrap, math
-
-out_path = "/mnt/data/University_Student_Results_Portal_ThreatDragon_v2.6.2_ORGANISED.json"
-
-def uid():
-    return str(uuid.uuid4())
-
-ids = {k: uid() for k in ["student","lecturer","admin","internet","webapp","appserver","db"]}
-
-def actor(key, name, x, y, z):
-    return {
-        "position": {"x": x, "y": y},
-        "size": {"width": 150, "height": 70},
-        "attrs": {
-            "text": {"text": name},
-            "body": {"stroke": "#333333", "strokeWidth": 1, "strokeDasharray": None}
-        },
-        "shape": "actor",
-        "zIndex": z,
-        "id": ids[key],
-        "data": {
-            "type": "tm.Actor",
-            "name": name,
-            "description": f"{name} user of the University Student Results Portal.",
-            "outOfScope": False,
-            "reasonOutOfScope": "",
-            "providesAuthentication": False,
-            "hasOpenThreats": False,
-            "threats": []
-        }
-    }
-
-def process(key, name, x, y, z, desc):
-    return {
-        "position": {"x": x, "y": y},
-        "size": {"width": 125, "height": 95},
-        "attrs": {
-            "text": {"text": name},
-            "body": {"stroke": "#333333", "strokeWidth": 1, "strokeDasharray": None}
-        },
-        "shape": "process",
-        "zIndex": z,
-        "id": ids[key],
-        "data": {
-            "type": "tm.Process",
-            "name": name,
-            "description": desc,
-            "outOfScope": False,
-            "reasonOutOfScope": "",
-            "privilegeLevel": "",
-            "hasOpenThreats": False,
-            "threats": []
-        }
-    }
-
-def store(name, x, y, z):
-    return {
-        "position": {"x": x, "y": y},
-        "size": {"width": 185, "height": 80},
-        "attrs": {
-            "text": {"text": name},
-            "topLine": {"stroke": "#333333", "strokeWidth": 1, "strokeDasharray": None},
-            "bottomLine": {"stroke": "#333333", "strokeWidth": 1, "strokeDasharray": None}
-        },
-        "shape": "store",
-        "zIndex": z,
-        "id": ids["db"],
-        "data": {
-            "type": "tm.Store",
-            "name": name,
-            "description": "Stores examination marks, student records, user accounts and transcript data.",
-            "outOfScope": False,
-            "reasonOutOfScope": "",
-            "isALog": False,
-            "storesCredentials": True,
-            "isEncrypted": False,
-            "isSigned": False,
-            "hasOpenThreats": False,
-            "threats": []
-        }
-    }
-
-def flow(src, dst, label, z, vertices=None, protocol="HTTPS", encrypted=True, public=False):
-    return {
-        "shape": "flow",
-        "attrs": {
-            "line": {
+{
+  "version": "2.6.2",
+  "release_version": "",
+  "released_at": "",
+  "summary": {
+    "title": "University Student Results Portal",
+    "owner": "Group 1 4E",
+    "description": "Threat model for a university web based student results portal used by students, lecturers and administrators",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [
+      {
+        "name": "Krishna Madhaparia"
+      },
+      {
+        "name": "Tevin Ngiru"
+      },
+      {
+        "name": "Eeshan Vaghjiani"
+      },
+      {
+        "name": "Dhruvin Bhudia"
+      },
+      {
+        "name": "Philip Tait"
+      }
+    ],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "Student Results portal threat model",
+        "diagramType": "Generic",
+        "placeholder": "University Student Results Portal system architecture and data flow diagram",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "version": "2.6.2",
+        "cells": [
+          {
+            "position": {
+              "x": 40,
+              "y": 90
+            },
+            "size": {
+              "width": 150,
+              "height": 70
+            },
+            "attrs": {
+              "text": {
+                "text": "Student"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 1,
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "41e66778-7d8b-4ad9-b6f6-a169f18fe943"
+                },
+                {
+                  "group": "right",
+                  "id": "ff61d01c-be03-488c-9bad-95f23872755b"
+                },
+                {
+                  "group": "bottom",
+                  "id": "58fe630b-f99c-4a27-b3bf-e334bbcdcfa7"
+                },
+                {
+                  "group": "left",
+                  "id": "882a03f6-d354-4110-a464-5614ad376071"
+                }
+              ]
+            },
+            "id": "2cf42781-8e42-4515-9111-704e2a47b565",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Student",
+              "description": "Student user of the University Student Results Portal.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "providesAuthentication": false,
+              "hasOpenThreats": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 40,
+              "y": 290
+            },
+            "size": {
+              "width": 150,
+              "height": 70
+            },
+            "attrs": {
+              "text": {
+                "text": "Lecturer"
+              },
+              "body": {
                 "stroke": "#333333",
                 "strokeWidth": 1,
-                "targetMarker": {"name": "classic"},
-                "strokeDasharray": None
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 2,
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "1822accc-775b-45e4-ad79-d4ac35ce451f"
+                },
+                {
+                  "group": "right",
+                  "id": "888e3a2c-0815-4d99-a003-ee8c8784695d"
+                },
+                {
+                  "group": "bottom",
+                  "id": "60878250-0f19-4990-8e0b-3af5b4d97733"
+                },
+                {
+                  "group": "left",
+                  "id": "fd6256d4-bc73-43d8-b172-33b3abfc51da"
+                }
+              ]
+            },
+            "id": "5ce9b3b6-9f79-41d8-ac93-8abddc81ade0",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Lecturer",
+              "description": "Lecturer user of the University Student Results Portal.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "providesAuthentication": false,
+              "hasOpenThreats": false,
+              "threats": []
             }
-        },
-        "width": 200,
-        "height": 100,
-        "zIndex": z,
-        "connector": "smooth",
-        "data": {
-            "type": "tm.Flow",
-            "name": label,
-            "description": "",
-            "outOfScope": False,
-            "reasonOutOfScope": "",
-            "protocol": protocol,
-            "isEncrypted": encrypted,
-            "isPublicNetwork": public,
-            "hasOpenThreats": False,
-            "threats": []
-        },
-        "id": uid(),
-        "labels": [label],
-        "source": {"cell": ids[src]},
-        "target": {"cell": ids[dst]},
-        "vertices": vertices or []
-    }
-
-def boundary(x, name, z):
-    # one vertical boundary and one text label above it
-    b = {
-        "shape": "trust-broundary-curve",
-        "attrs": {
-            "line": {
-                "stroke": "#555555",
+          },
+          {
+            "position": {
+              "x": 40,
+              "y": 490
+            },
+            "size": {
+              "width": 150,
+              "height": 70
+            },
+            "attrs": {
+              "text": {
+                "text": "Administrator"
+              },
+              "body": {
+                "stroke": "#333333",
                 "strokeWidth": 1,
-                "strokeDasharray": "8 5",
-                "targetMarker": "",
-                "sourceMarker": ""
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 3,
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "7d759dd3-6d91-44a5-8982-59485fa27365"
+                },
+                {
+                  "group": "right",
+                  "id": "de552646-01ca-4622-8868-84043ada5524"
+                },
+                {
+                  "group": "bottom",
+                  "id": "24783253-2932-47d6-9539-4817dd49604b"
+                },
+                {
+                  "group": "left",
+                  "id": "5b4a0281-ddab-4e09-b482-927ff870769b"
+                }
+              ]
+            },
+            "id": "183c4c48-4682-40a3-a76b-77806c18b510",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Administrator",
+              "description": "Administrator user of the University Student Results Portal.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "providesAuthentication": false,
+              "hasOpenThreats": false,
+              "threats": []
             }
-        },
-        "width": 200,
-        "height": 100,
-        "zIndex": z,
-        "connector": "smooth",
-        "labels": [{"attrs": {"text": {"text": ""}}}],
-        "data": {
-            "type": "tm.Boundary",
-            "name": name,
-            "description": name,
-            "isTrustBoundary": True,
-            "hasOpenThreats": False
-        },
-        "id": uid(),
-        "source": {"x": x, "y": 80},
-        "target": {"x": x, "y": 760},
-        "vertices": []
-    }
-    t = {
-        "position": {"x": x - 70, "y": 30},
-        "size": {"width": 140, "height": 35},
-        "attrs": {"text": {"text": name}},
-        "shape": "td-text-block",
-        "zIndex": z+1,
-        "id": uid(),
-        "data": {"type": "tm.Text", "name": name, "hasOpenThreats": False}
-    }
-    return [b,t]
-
-cells = []
-
-# Main components — spacious and aligned
-cells += [
-    actor("student","Student", 40, 120, 1),
-    actor("lecturer","Lecturer", 40, 340, 2),
-    actor("admin","Administrator", 40, 560, 3),
-
-    process("internet","Internet", 365, 340, 4,
-            "Public network used to access the portal."),
-    process("webapp","Web Application", 640, 340, 5,
-            "User-facing university results portal."),
-    process("appserver","Application Server", 900, 340, 6,
-            "Processes authentication, marks, results, transcripts and approvals."),
-    store("Results Database", 1175, 348, 7),
-]
-
-# Trust boundaries, short titles
-for group in [
-    boundary(275, "External Boundary", 8),
-    boundary(565, "University Web Boundary", 10),
-    boundary(1110, "Data Tier Boundary", 12),
-]:
-    cells.extend(group)
-
-z = 20
-
-# User flows: put request lane above, response lane below each actor
-cells += [
-    flow("student","internet","Login details / Results request",z,
-         [{"x":220,"y":145},{"x":300,"y":145},{"x":330,"y":300}], public=True),
-    flow("internet","student","Results / Transcript",z+1,
-         [{"x":330,"y":250},{"x":300,"y":205},{"x":220,"y":205}], public=True),
-
-    flow("lecturer","internet","Login details / Marks upload",z+2,
-         [{"x":220,"y":350},{"x":300,"y":350}], public=True),
-    flow("internet","lecturer","Update status",z+3,
-         [{"x":300,"y":415},{"x":220,"y":415}], public=True),
-
-    flow("admin","internet","Login details / Approval request",z+4,
-         [{"x":220,"y":575},{"x":300,"y":575},{"x":330,"y":455}], public=True),
-    flow("internet","admin","Admin / Approval status",z+5,
-         [{"x":330,"y":500},{"x":300,"y":635},{"x":220,"y":635}], public=True),
-]
-
-# Core system flows: one upper request lane and one lower response lane
-cells += [
-    flow("internet","webapp","Portal request",z+6,
-         [{"x":510,"y":320},{"x":590,"y":320}], public=True),
-    flow("webapp","internet","Portal response",z+7,
-         [{"x":590,"y":455},{"x":510,"y":455}], public=True),
-
-    flow("webapp","appserver","Marks / Results / Transcript / Approval request",z+8,
-         [{"x":790,"y":300},{"x":850,"y":300}]),
-    flow("appserver","webapp","Application response",z+9,
-         [{"x":850,"y":470},{"x":790,"y":470}]),
-
-    flow("appserver","db","Read / Write marks and accounts",z+10,
-         [{"x":1050,"y":305},{"x":1130,"y":305}], protocol="Database connection"),
-    flow("db","appserver","Results / Student / Transcript data",z+11,
-         [{"x":1130,"y":475},{"x":1050,"y":475}], protocol="Database connection"),
-]
-
-# Small legend text
-legend = {
-    "position": {"x": 355, "y": 700},
-    "size": {"width": 850, "height": 40},
-    "attrs": {"text": {"text": "DFD: University Student Results Portal — Member 1 System Architecture"}},
-    "shape": "td-text-block",
-    "zIndex": 40,
-    "id": uid(),
-    "data": {"type": "tm.Text", "name": "DFD: University Student Results Portal — Member 1 System Architecture", "hasOpenThreats": False}
+          },
+          {
+            "position": {
+              "x": 300,
+              "y": 290
+            },
+            "size": {
+              "width": 120,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "Internet"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 4,
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "924831d4-a86f-4800-86fe-fb22ad5a2a31"
+                },
+                {
+                  "group": "right",
+                  "id": "b33308a6-2537-4aee-b7f8-de49f1da79e8"
+                },
+                {
+                  "group": "bottom",
+                  "id": "81c5db3e-433a-4b62-b1d3-93199b8c2e27"
+                },
+                {
+                  "group": "left",
+                  "id": "df360084-75b4-4478-9dbc-af4a1fd034fe"
+                }
+              ]
+            },
+            "id": "e8e1b415-da33-43fc-aefe-639c6d9dd496",
+            "data": {
+              "type": "tm.Process",
+              "name": "Internet",
+              "description": "Public network used by students, lecturers and administrators to reach the portal.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "privilegeLevel": "",
+              "hasOpenThreats": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 530,
+              "y": 290.5
+            },
+            "size": {
+              "width": 120,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "Web Application"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 5,
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "dd508c03-50fe-44b9-96ae-e34acaa6b362"
+                },
+                {
+                  "group": "right",
+                  "id": "e446ea92-72b4-472d-af5a-a8018ac11488"
+                },
+                {
+                  "group": "bottom",
+                  "id": "424f001d-5988-4e20-b28f-52bf7e44e481"
+                },
+                {
+                  "group": "left",
+                  "id": "b393a3a1-8daa-4ae8-b1a9-17adae94f149"
+                }
+              ]
+            },
+            "id": "ffa09476-720d-474c-89e7-304d859292e1",
+            "data": {
+              "type": "tm.Process",
+              "name": "Web Application",
+              "description": "University web interface that receives portal requests and returns results, transcripts and status messages.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "privilegeLevel": "",
+              "hasOpenThreats": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 745,
+              "y": 283
+            },
+            "size": {
+              "width": 120,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "Application Server"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 6,
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "4309f9ea-03fd-4ef3-aaf1-d1f4014b8db1"
+                },
+                {
+                  "group": "right",
+                  "id": "21d5878b-8ec1-476a-8715-964901df3cc8"
+                },
+                {
+                  "group": "bottom",
+                  "id": "6fdd84ab-e3a6-4d5a-a2bd-509747e6092d"
+                },
+                {
+                  "group": "left",
+                  "id": "a1d220d8-5bdc-4d07-9072-aa03124d6e41"
+                }
+              ]
+            },
+            "id": "9fefc7d6-41b4-421c-8ac6-e384d7f0d7b5",
+            "data": {
+              "type": "tm.Process",
+              "name": "Application Server",
+              "description": "Processes authentication, authorization, examination marks, result approvals and transcript requests.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "privilegeLevel": "",
+              "hasOpenThreats": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 160,
+              "y": 15
+            },
+            "size": {
+              "width": 160,
+              "height": 40
+            },
+            "attrs": {
+              "text": {
+                "text": "User / Internet Trust Boundary"
+              }
+            },
+            "visible": true,
+            "shape": "td-text-block",
+            "zIndex": 9,
+            "id": "3c0f605c-6e59-40d6-8475-7456efa079b1",
+            "data": {
+              "type": "tm.Text",
+              "name": "User / Internet Trust Boundary",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Read/write marks, accounts, privileges and approvals",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Read/write marks, accounts, privileges and approvals"
+            ],
+            "id": "9887de7b-0f60-423a-a3e0-3b4b1e887716",
+            "source": {
+              "x": 826,
+              "y": 290
+            },
+            "target": {
+              "x": 926,
+              "y": 390
+            }
+          },
+          {
+            "position": {
+              "x": 385,
+              "y": 15
+            },
+            "size": {
+              "width": 160,
+              "height": 40
+            },
+            "attrs": {
+              "text": {
+                "text": "Internet / University Web Trust Boundary"
+              }
+            },
+            "visible": true,
+            "shape": "td-text-block",
+            "zIndex": 11,
+            "id": "3eccfbe2-f6ae-46c9-bcd9-2528c994c5ad",
+            "data": {
+              "type": "tm.Text",
+              "name": "Internet / University Web Trust Boundary",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "shape": "trust-broundary-curve",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "strokeWidth": 1,
+                "targetMarker": "",
+                "strokeDasharray": "8 5",
+                "sourceMarker": ""
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 12,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "",
+              "description": "Application / Data Trust Boundary",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "crossingFlows": [],
+              "containedElements": []
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "Trust Boundary"
+                  },
+                  "text": {
+                    "text": ""
+                  }
+                }
+              }
+            ],
+            "id": "8e73c50a-9552-4df1-ad4b-00f4afd2d0cb",
+            "source": {
+              "x": 945,
+              "y": 40
+            },
+            "target": {
+              "x": 945,
+              "y": 650
+            },
+            "vertices": []
+          },
+          {
+            "position": {
+              "x": 865,
+              "y": 15
+            },
+            "size": {
+              "width": 160,
+              "height": 40
+            },
+            "attrs": {
+              "text": {
+                "text": "Application / Data Trust Boundary"
+              }
+            },
+            "visible": true,
+            "shape": "td-text-block",
+            "zIndex": 13,
+            "id": "0baf9338-8200-4dd8-8edd-dbb556ad5436",
+            "data": {
+              "type": "tm.Text",
+              "name": "Application / Data Trust Boundary",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 20,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Login details;\n view results; \ntranscript request",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Login details;\n view results; \ntranscript request"
+            ],
+            "id": "fb408f84-864e-4d81-8ea6-bc8d59412275",
+            "source": {
+              "cell": "2cf42781-8e42-4515-9111-704e2a47b565"
+            },
+            "target": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "vertices": [
+              {
+                "x": 240,
+                "y": 100
+              },
+              {
+                "x": 290,
+                "y": 120
+              },
+              {
+                "x": 360,
+                "y": 240
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 21,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Results and \ntranscript download",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Results and \ntranscript download"
+            ],
+            "id": "fad6e7ab-e5e7-4cf1-9160-c6e2ea4870a0",
+            "source": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "target": {
+              "cell": "2cf42781-8e42-4515-9111-704e2a47b565"
+            },
+            "vertices": [
+              {
+                "x": 270,
+                "y": 210
+              },
+              {
+                "x": 220,
+                "y": 185
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 22,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Login details; \nupload and \nmodify examination marks",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Login details; \nupload and \nmodify examination marks"
+            ],
+            "id": "8d3ad237-0c7e-43f6-a29e-9fabb2b371e8",
+            "source": {
+              "cell": "5ce9b3b6-9f79-41d8-ac93-8abddc81ade0"
+            },
+            "target": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "vertices": [
+              {
+                "x": 40,
+                "y": 425
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 23,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Upload and update status",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Upload and update status"
+            ],
+            "id": "e07fefc0-9670-4559-b519-1b7ff2ea4613",
+            "source": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "target": {
+              "cell": "5ce9b3b6-9f79-41d8-ac93-8abddc81ade0"
+            },
+            "vertices": [
+              {
+                "x": 95,
+                "y": 225
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 24,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Login details;\naccount changes; privileges; \napprovals",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Login details;\naccount changes; privileges; \napprovals"
+            ],
+            "id": "b8ca2102-0242-453a-87fb-042abfee9d0a",
+            "source": {
+              "cell": "183c4c48-4682-40a3-a76b-77806c18b510"
+            },
+            "target": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "vertices": [
+              {
+                "x": 220,
+                "y": 525
+              },
+              {
+                "x": 250,
+                "y": 460
+              },
+              {
+                "x": 270,
+                "y": 410
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 25,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Administration and \napproval status",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Administration and \napproval status"
+            ],
+            "id": "ad5db00b-184a-4db1-876e-a4c6246f211a",
+            "source": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "target": {
+              "cell": "183c4c48-4682-40a3-a76b-77806c18b510"
+            },
+            "vertices": [
+              {
+                "x": 270,
+                "y": 565
+              },
+              {
+                "x": 220,
+                "y": 675
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 26,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "HTTPS portal requests",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "HTTPS portal requests"
+            ],
+            "id": "f41e3802-088a-44a4-8b58-ebbd4856faf8",
+            "source": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "target": {
+              "cell": "ffa09476-720d-474c-89e7-304d859292e1"
+            },
+            "vertices": [
+              {
+                "x": 470,
+                "y": 230
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 27,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "HTTPS portal \nresponses",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "HTTPS portal \nresponses"
+            ],
+            "id": "f4d96c59-c1b3-4ee5-9600-dfda9d95c3f2",
+            "source": {
+              "cell": "ffa09476-720d-474c-89e7-304d859292e1"
+            },
+            "target": {
+              "cell": "e8e1b415-da33-43fc-aefe-639c6d9dd496"
+            },
+            "vertices": [
+              {
+                "x": 475,
+                "y": 440
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 28,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Authenticated requests: \nmarks, results,\n transcripts, approvals",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": false,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Authenticated requests: \nmarks, results,\n transcripts, approvals"
+            ],
+            "id": "7281dfb1-d862-469c-8e73-21b6a378b474",
+            "source": {
+              "cell": "ffa09476-720d-474c-89e7-304d859292e1"
+            },
+            "target": {
+              "cell": "9fefc7d6-41b4-421c-8ac6-e384d7f0d7b5"
+            },
+            "vertices": [
+              {
+                "x": 710,
+                "y": 240
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 29,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Results, \ntranscript data and \noperation status",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": false,
+              "protocol": "HTTPS",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Results, \ntranscript data and \noperation status"
+            ],
+            "id": "65dc25f5-940e-49a9-900d-4ed8c220a82d",
+            "source": {
+              "cell": "9fefc7d6-41b4-421c-8ac6-e384d7f0d7b5"
+            },
+            "target": {
+              "cell": "ffa09476-720d-474c-89e7-304d859292e1"
+            },
+            "vertices": [
+              {
+                "x": 690,
+                "y": 435
+              }
+            ]
+          },
+          {
+            "position": {
+              "x": 1080,
+              "y": 303
+            },
+            "size": {
+              "width": 112.5,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Results Database"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 32,
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "8b1bf7e8-6d3e-48b9-a2a3-dde1a7ae4289"
+                },
+                {
+                  "group": "right",
+                  "id": "b4c08912-cba2-4f59-ac0b-e7c2ed9b3ba8"
+                },
+                {
+                  "group": "bottom",
+                  "id": "28823d66-eefc-42ed-8622-5829e4a7c985"
+                },
+                {
+                  "group": "left",
+                  "id": "3b4e948d-0d7a-4d87-b23f-cbfc0c48f8e0"
+                }
+              ]
+            },
+            "id": "41d518c6-5ec1-4a7c-9422-563a05301c77",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Results Database",
+              "description": "",
+              "isTrustBoundary": false,
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "providesAuthentication": false,
+              "threats": []
+            }
+          }
+        ]
+      }
+    ],
+    "diagramTop": 1,
+    "reviewer": "",
+    "threatTop": 0
+  }
 }
-cells.append(legend)
-
-model = {
-    "version": "2.6.2",
-    "release_version": "",
-    "released_at": "",
-    "summary": {
-        "title": "University Student Results Portal",
-        "owner": "Group 1 4E",
-        "description": "Threat model for a university web based student results portal used by students, lecturers and administrators",
-        "id": 0
-    },
-    "detail": {
-        "contributors": [
-            {"name": "Krishna Madhaparia"},
-            {"name": "Tevin Ngiru"},
-            {"name": "Eeshan Vaghjiani"},
-            {"name": "Dhruvin Bhudia"},
-            {"name": "Philip Tait"}
-        ],
-        "diagrams": [{
-            "id": 0,
-            "title": "Student Results portal threat model",
-            "diagramType": "Generic",
-            "placeholder": "Organised University Student Results Portal system architecture and data flow diagram",
-            "thumbnail": "./public/content/images/thumbnail.jpg",
-            "version": "2.6.2",
-            "cells": cells
-        }],
-        "diagramTop": 1,
-        "reviewer": "",
-        "threatTop": 0
-    }
-}
-
-with open(out_path, "w", encoding="utf-8") as f:
-    json.dump(model, f, indent=2, ensure_ascii=False)
-
-# validation
-with open(out_path, encoding="utf-8") as f:
-    chk = json.load(f)
-cell_ids = {c["id"] for c in chk["detail"]["diagrams"][0]["cells"]}
-flows = [c for c in chk["detail"]["diagrams"][0]["cells"] if c.get("data",{}).get("type")=="tm.Flow"]
-assert all(fl["source"]["cell"] in cell_ids and fl["target"]["cell"] in cell_ids for fl in flows)
-
-print("Created organised Threat Dragon v2.6.2 file:")
-print(out_path)
-print("Components + boundaries + flows:", len(cells))
-print("Data flows:", len(flows))
